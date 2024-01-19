@@ -37,7 +37,7 @@ docker image ls
 
 ## !!! IMPORTANT
 
-In your Dockerfile, you are using the EXPOSE instruction to expose port 3400. However, the EXPOSE instruction in Docker is more of a documentation feature. It does not actually publish the specified ports. It's used to inform others about the ports that the container is expected to use.
+In Dockerfile, you are using the EXPOSE instruction to expose port 3400. However, the EXPOSE instruction in Docker is more of a documentation feature. It does not actually publish the specified ports. It's used to inform others about the ports that the container is expected to use.
 
 The actual port mapping happens when you run the container using the -p flag in the docker run command.
 
