@@ -7,6 +7,9 @@ app.get('/', function (req, res) {
 app.get('/about', function (req, res) {
   res.send('This is about')
 })
+app.get('/devops', function (req, res) {
+  res.send('This is devops')
+})
  
 app.listen(3400,()=>{
     console.log(`Connected to the port 3400`);
