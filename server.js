@@ -10,6 +10,9 @@ app.get('/about', function (req, res) {
 app.get('/devops', function (req, res) {
   res.send('This is devops')  
 })
+app.get('/project', function (req, res) {
+  res.send('is project done ?')  
+})
  
 app.listen(8080,()=>{
     console.log(`Connected to the port 8080`);
