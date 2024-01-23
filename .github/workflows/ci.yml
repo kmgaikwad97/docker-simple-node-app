@@ -24,7 +24,7 @@ jobs:
         run: |
           git clone https://${{ secrets.GITHUBTOKEN }}@github.com/kshitijwohlig/gitops-cd.git
           echo ${{ secrets.GITHUBTOKEN }}
-          cd gitops
+          cd gitops-cd
           git checkout main
           git config user.name "kshitijwohlig"
           git config user.email "kshitij.gaikwad@wohlig.com"
