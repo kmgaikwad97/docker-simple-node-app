@@ -8,7 +8,7 @@ app.get('/about', function (req, res) {
   res.send('This is about')
 })
 app.get('/devops', function (req, res) {
-  res.send('This is devops') 
+  res.send('This is devops')  
 })
  
 app.listen(8080,()=>{
