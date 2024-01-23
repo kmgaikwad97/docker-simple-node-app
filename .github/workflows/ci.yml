@@ -1,24 +1,35 @@
-name: CI Pipeline
-
+name: Build, Push, and Deploy
 on:
   push:
-    branches: [ "main" ]
-
+    branches:
+      - integration
 jobs:
-
-  build:
-
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Login Dockerhub
-      env:
-        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      
-    - name: Build the Docker image
-      run: docker build -t kshitijg/cicd-pipeline .
-    - name: Push to Dockerhub
-      run: docker push kshitijg/cicd-pipeline:latest
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set env
+        run: echo "GITHUB_BRANCH=$(echo $GITHUB_REF_NAME-$GITHUB_SHA)" >> $GITHUB_ENV  
+ 
+      - name: Docker Login
+        env:
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+             docker build -t kshitijg/sample:$GITHUB_REF_NAME-$GITHUB_SHA .
+             docker push kshitijg/sample:$GITHUB_REF_NAME-$GITHUB_SHA
+      - name: Update manifest file
+        run: |
+          git clone https://${{ secrets.GITHUBTOKEN }}@github.com/kshitijwohlig/gitops-cd.git
+          echo ${{ secrets.GITHUBTOKEN }}
+          cd gitops
+          git checkout main
+          git config user.name "kshitijwohlig"
+          git config user.email "kshitij.gaikwad@wohlig.com"
+          yq e '.spec.template.spec.containers[0].image = "kshitijg/sample:${{ env.GITHUB_BRANCH }}"' -i deplyments.yaml
+          git add .
+          git commit -m "updating newer image"
+          git status
+          git push origin main
